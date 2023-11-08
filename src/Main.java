@@ -98,5 +98,7 @@ public class Main {
 
         JButton button1 = new JButton();
         frame.add(new JButton("sisisi"));
+
+
     }
 }
