@@ -3,17 +3,23 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.Color;
+import java.awt.Font;
+
 
 public class Traductor extends JPanel{
 
     static JPanel panel= new JPanel();
 
     public Traductor(String texto) {
+
         //Hash map
         //Se crea un hash map que recibe variables tipo String como Keys
         //y devuelve variables tipo File
@@ -103,6 +109,7 @@ public class Traductor extends JPanel{
 
 
 
+
         //for
         //Analiza caracter por caracter, agarra el valor del HashMap y pone la imagen en un JLabel
         for (int i=0;i<texto.length();i++){
@@ -111,7 +118,7 @@ public class Traductor extends JPanel{
             String b= String.valueOf(texto.charAt(i)).toUpperCase();
                 String c;
                 //En caso de que se ingrese un espacio
-            if (b==" "){
+            if (b.equals(" ")) {
                 c="images/empty.jpeg";
                 //Cualquier otro caracter
                 //Se obtiene el valor almacenado para b (El caracter que se está analizando)
@@ -135,13 +142,17 @@ public class Traductor extends JPanel{
              JLabel label = new JLabel(new ImageIcon(image));
             //Se añade el label al JPanel, que declaramos fuera del constructor
                 panel.add(label);
+                panel.setVisible(true);
+                //panel.setSize(400,400);
+                panel.setBackground(Color.black);
+                panel.setBounds(220, 350, 1000, 1000);
         }
     }
 
 
     public static void main(String[] args) {
 
-            //Creamos un JFrame, es el espacio en el que vamos a colocar los demás componentes
+        //Creamos un JFrame, es el espacio en el que vamos a colocar los demás componentes
         JFrame Fr = new JFrame("Traductor Dactilología");
         //Esto sirve para que al cerrar la ventana el programa deje de ejecutarse
         Fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -150,41 +161,114 @@ public class Traductor extends JPanel{
 
         //Creamos una etiqueta para que aparezca ese texto
         JLabel etiquetaEntrada = new JLabel("Texto a Traducir:");
-        //Creamos un campo en el que el usuario pueda escribir
-        JTextField entradaTexto= new JTextField(20);
+        Font etiquetaEntrad = new Font("Arial", Font.PLAIN, 30);
+        etiquetaEntrada.setForeground(Color.white);
+        etiquetaEntrada.setFont(etiquetaEntrad);
 
         //Creamos un botón que al clickear traduzca el texto
-       JButton botonTraducir = new JButton("Traducir");
+        JButton botonTraducir = new JButton("Traducir");
+        Font botonTraducir1 = new Font("Arial", Font.PLAIN, 30);
+        botonTraducir.setForeground(Color.gray);
+        botonTraducir.setFont(botonTraducir1);
+
+
+        //Creamos un campo en el que el usuario pueda escribir
+        JTextField entradaTexto= new JTextField(20);
+        Font entradaText = new Font("Arial", Font.PLAIN, 30);
+        entradaTexto.setForeground(Color.black);
+        entradaTexto.setFont(entradaText);
+
+        //Creamos un boton para borrar el texto
+        JButton botonBorrar = new JButton("Borrar Texto");
+        Font botonBorrar1 = new Font("Arial", Font.PLAIN, 30);
+        botonBorrar.setForeground(Color.red);
+        botonBorrar.setFont(botonBorrar1);
+
+        //Crea un nueva etiqueta para que se muestre el "Texto Traducido"
+        JLabel etiquetaTraduccion = new JLabel("Texto Traducido:");
+        Font etiquetaTraduccion1 = new Font("Arial", Font.PLAIN, 30);
+        etiquetaTraduccion.setForeground(Color.WHITE);
+        etiquetaTraduccion.setFont(etiquetaTraduccion1);
+
+
+        //Boton para borrar texto
         botonTraducir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed (ActionEvent e){
                 //Aqui va lo que pasará cuando se clicke el botón
                 //En este caso obtiene el texto del Textfield que creamos (entradatexto),
+                panel.removeAll();
                 String a= entradaTexto.getText();
                 //crea un nuevo Bastian que recibe como argumento el texto obtenido de entradatexto,
                 Traductor bastian= new Traductor(a);
+                Fr.add(panel);
                 //y añade el Jpanel ya creado al JFrame que creamos en el main
                 //Este panel ya contiene las imágenes.
+                Fr.revalidate();
                 Fr.add(panel);
             }
         });
-        //Crea un nueva etiqueta para que se muestre el "Texto Traducido"
-        JLabel etiquetaTraduccion = new JLabel("Texto Traducido:");
+        botonBorrar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Borrar el texto del campo de entrada
+                entradaTexto.setText("");
+            }
+        });
+
+        //Funcion del enter del teclado
+        entradaTexto.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    // Clear the panel before adding new components
+                    panel.removeAll();
+
+                    // Get the text from the input field
+                    String a = entradaTexto.getText();
+
+                    // Create a new Traductor instance and add its panel to the frame
+                    Traductor bastian = new Traductor(a);
+                    Fr.add(panel);
+
+                    // Repaint the frame to reflect the changes
+                    Fr.revalidate();
+                    Fr.repaint();
+
+                }
+            }
+        });
+
+
+        etiquetaEntrada.setBounds(600, 50, 300, 30);
+
+        // Configurar la posición y tamaño del campo de entradaTexto
+        entradaTexto.setBounds(570, 100, 300, 50);
+
+        // Configurar la posición y tamaño del botónTraducir
+        botonTraducir.setBounds(640, 150, 150, 50);
+
+        // Configurar la posición y tamaño de la etiquetaTraduccion
+        etiquetaTraduccion.setBounds(600, 270, 250, 50);
+
+        // Configurar la posición y tamaño del botónBorrar
+        botonBorrar.setBounds(590, 200, 270, 50);
+
 
         //Añadimos todos los componentes al JFrame
         Fr.add(etiquetaEntrada);
         Fr.add(entradaTexto);
         Fr.add(botonTraducir);
         Fr.add(etiquetaTraduccion);
+        Fr.add(botonBorrar);
+        Fr.setLayout(null);
 
         //Ajusta el JFrame al tamaño de los componentes
         Fr.pack();
-        //Hace visible el Jframe
+        Fr.setSize(500, 800);
+        Fr.getContentPane().setBackground(Color.black);
         Fr.setVisible(true);
+         }
 
-    }
-    }
-
-
+}
 
 
