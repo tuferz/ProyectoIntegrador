@@ -126,6 +126,22 @@ public class Traductor extends JPanel{
                  c= String.valueOf(ABC.get(b));
             }
 
+            if(i%8==0 && !c.equals("images/empty.jpeg") && i!=0 && i!=texto.length()){
+                BufferedImage image = null;
+                //
+                try{
+                    //En el espacio donde dice c debe ir el pathname del File
+                    //P eso c debe ser un String
+                    image = ImageIO.read(new File("images/empty.jpeg"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //Se crea el JLabel que pueda contener la imagen que cargamos
+                JLabel label = new JLabel(new ImageIcon(image));
+                //Se añade el label al JPanel, que declaramos fuera del constructor
+                panel.add(label);
+            }
+
 
             //Imagen
             //Carga la imagen
@@ -212,6 +228,16 @@ public class Traductor extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 // Borrar el texto del campo de entrada
                 entradaTexto.setText("");
+                panel.removeAll();
+                String a = entradaTexto.getText();
+
+                // Create a new Traductor instance and add its panel to the frame
+                Traductor bastian = new Traductor(a);
+                Fr.add(panel);
+
+                // Repaint the frame to reflect the changes
+                Fr.revalidate();
+                Fr.repaint();
             }
         });
 
