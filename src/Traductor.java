@@ -13,10 +13,31 @@ import java.util.Map;
 import java.awt.Color;
 import java.awt.Font;
 
+import java.awt.Graphics;
+import java.awt.GradientPaint;
+import java.awt.Graphics2D;
+
 
 public class Traductor extends JPanel{
-
     static JPanel panel= new JPanel();
+
+
+    public static class Fondo extends JPanel{
+    private Color color1 = Color.BLACK;
+    private Color color2 = Color.BLUE;
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        Graphics2D g2d = (Graphics2D) g;
+        int w = getWidth();
+        int h = getHeight();
+
+        GradientPaint degradado1 = new GradientPaint(0, 0, color1, 0, h, color2);
+        g2d.setPaint(degradado1);
+        g2d.fillRect(0, 0, w, h);
+    }
+    }
+
 
     public Traductor(String texto) {
 
@@ -104,7 +125,7 @@ public class Traductor extends JPanel{
         File letZ = new File("images/Z.png");
         ABC.put("Z", letZ);
 
-        File letempty = new File("images/nigga.png");
+        File letempty = new File("images/empty.jpeg");
         ABC.put(" ", letempty);
 
 
@@ -119,27 +140,11 @@ public class Traductor extends JPanel{
                 String c;
                 //En caso de que se ingrese un espacio
             if (b.equals(" ")) {
-                c="images/nigga.png";
+                c="images/empty.jpeg";
                 //Cualquier otro caracter
                 //Se obtiene el valor almacenado para b (El caracter que se está analizando)
             }   else{
                  c= String.valueOf(ABC.get(b));
-            }
-
-            if(i%8==0 && !c.equals("images/empty.jpeg") && i!=0 && i!=texto.length()){
-                BufferedImage image = null;
-                //
-                try{
-                    //En el espacio donde dice c debe ir el pathname del File
-                    //P eso c debe ser un String
-                    image = ImageIO.read(new File("images/empty.jpeg"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //Se crea el JLabel que pueda contener la imagen que cargamos
-                JLabel label = new JLabel(new ImageIcon(image));
-                //Se añade el label al JPanel, que declaramos fuera del constructor
-                panel.add(label);
             }
 
 
@@ -154,19 +159,28 @@ public class Traductor extends JPanel{
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+
             //Se crea el JLabel que pueda contener la imagen que cargamos
              JLabel label = new JLabel(new ImageIcon(image));
+
             //Se añade el label al JPanel, que declaramos fuera del constructor
+
                 panel.add(label);
                 panel.setVisible(true);
-                //panel.setSize(400,400);
-                panel.setBackground(Color.black);
-                panel.setBounds(220, 350, 1000, 1000);
+                panel.setBounds(220, 350, 1000, 900);
+            panel.setOpaque(false);
+
+
         }
     }
 
-
     public static void main(String[] args) {
+
+
+
+        Fondo fondo = new Fondo();
+
 
         //Creamos un JFrame, es el espacio en el que vamos a colocar los demás componentes
         JFrame Fr = new JFrame("Traductor Dactilología");
@@ -222,22 +236,15 @@ public class Traductor extends JPanel{
                 //Este panel ya contiene las imágenes.
                 Fr.revalidate();
                 Fr.add(panel);
+                Fr.repaint();
+                Fr.add(bastian);
+                Fr.add(fondo);
             }
         });
         botonBorrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Borrar el texto del campo de entrada
                 entradaTexto.setText("");
-                panel.removeAll();
-                String a = entradaTexto.getText();
-
-                // Create a new Traductor instance and add its panel to the frame
-                Traductor bastian = new Traductor(a);
-                Fr.add(panel);
-
-                // Repaint the frame to reflect the changes
-                Fr.revalidate();
-                Fr.repaint();
             }
         });
 
@@ -245,7 +252,7 @@ public class Traductor extends JPanel{
         entradaTexto.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyChar() == KeyEvent.VK_ENTER) {
                     // Clear the panel before adding new components
                     panel.removeAll();
 
@@ -255,14 +262,27 @@ public class Traductor extends JPanel{
                     // Create a new Traductor instance and add its panel to the frame
                     Traductor bastian = new Traductor(a);
                     Fr.add(panel);
+                    Fr.add(bastian);
 
                     // Repaint the frame to reflect the changes
                     Fr.revalidate();
                     Fr.repaint();
-
+                    Fr.add(fondo);
                 }
             }
         });
+
+
+        ImageIcon logoIcon = new ImageIcon("images/Logo Ing.png");
+
+        Image image = logoIcon.getImage();
+        Image newImage = image.getScaledInstance(226, 325, Image.SCALE_SMOOTH);
+
+        ImageIcon scaledLogoIcon = new ImageIcon(newImage);
+
+        // Crea un JLabel para mostrar el logo
+        JLabel logoLabel = new JLabel(scaledLogoIcon);
+
 
 
         etiquetaEntrada.setBounds(600, 50, 300, 30);
@@ -281,6 +301,15 @@ public class Traductor extends JPanel{
 
 
         //Añadimos todos los componentes al JFrame
+
+        logoLabel.setBounds(825, 250, 1000, 1000); // Modifica las coordenadas y el tamaño según tu preferencia
+
+        // Agrega el JLabel del logo al JFrame
+
+        Fr.add(logoLabel);
+
+        logoLabel.setVisible(true);
+
         Fr.add(etiquetaEntrada);
         Fr.add(entradaTexto);
         Fr.add(botonTraducir);
@@ -288,12 +317,19 @@ public class Traductor extends JPanel{
         Fr.add(botonBorrar);
         Fr.setLayout(null);
 
+
+        fondo.setVisible(true);
+        Fr.add(fondo, BorderLayout.CENTER);
+        fondo.setSize(2560, 1600);
         //Ajusta el JFrame al tamaño de los componentes
+        Fr.add(fondo);
         Fr.pack();
         Fr.setSize(500, 800);
-        Fr.getContentPane().setBackground(Color.black);
+        //Fr.setComponentZOrder(panel, 0);
+        Fr.setComponentZOrder(Fr.getContentPane(), 0);
         Fr.setVisible(true);
-         }
+
+    }
 
 }
 
