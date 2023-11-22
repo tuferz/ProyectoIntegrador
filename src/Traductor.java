@@ -74,10 +74,10 @@ public class Traductor extends JPanel{
         File letI = new File("images/I.png");
         ABC.put("I", letI);
 
-        File letJ = new File("images/J.png");
+        File letJ = new File("images/J.gif");
         ABC.put("J", letJ);
 
-        File letK = new File("images/K.png");
+        File letK = new File("images/K.gif");
         ABC.put("K", letK);
 
         File letL = new File("images/L.png");
@@ -95,7 +95,7 @@ public class Traductor extends JPanel{
         File letP = new File("images/P.png");
         ABC.put("P", letP);
 
-        File letQ = new File("images/Q.png");
+        File letQ = new File("images/Q.gif");
         ABC.put("Q", letQ);
 
         File letR = new File("images/R.png");
@@ -116,16 +116,16 @@ public class Traductor extends JPanel{
         File letW = new File("images/W.png");
         ABC.put("W", letW);
 
-        File letX = new File("images/X.png");
+        File letX = new File("images/X.gif");
         ABC.put("X", letX);
 
         File letY = new File("images/Y.png");
         ABC.put("Y", letY);
 
-        File letZ = new File("images/Z.png");
+        File letZ = new File("images/Z.gif");
         ABC.put("Z", letZ);
 
-        File letempty = new File("images/empty.jpeg");
+        File letempty = new File("images/nigga.png");
         ABC.put(" ", letempty);
 
 
@@ -140,7 +140,7 @@ public class Traductor extends JPanel{
                 String c;
                 //En caso de que se ingrese un espacio
             if (b.equals(" ")) {
-                c="images/empty.jpeg";
+                c="images/nigga.png";
                 //Cualquier otro caracter
                 //Se obtiene el valor almacenado para b (El caracter que se está analizando)
             }   else{
