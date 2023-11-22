@@ -23,20 +23,14 @@ public class Traductor extends JPanel{
 
 
     public static class Fondo extends JPanel{
-    private Color color1 = Color.BLACK;
-    private Color color2 = Color.BLUE;
-    public void paint(Graphics g) {
-        super.paint(g);
+        public static final Image FOTO1 = new ImageIcon("images/INTERFAZ1.jpg").getImage();
 
-        Graphics2D g2d = (Graphics2D) g;
-        int w = getWidth();
-        int h = getHeight();
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(FOTO1, 0, 0, getWidth(), getHeight(), this);
+}
 
-        GradientPaint degradado1 = new GradientPaint(0, 0, color1, 0, h, color2);
-        g2d.setPaint(degradado1);
-        g2d.fillRect(0, 0, w, h);
-    }
-    }
+}
 
 
     public Traductor(String texto) {
@@ -125,7 +119,7 @@ public class Traductor extends JPanel{
         File letZ = new File("images/Z.gif");
         ABC.put("Z", letZ);
 
-        File letempty = new File("images/nigga.png");
+        File letempty = new File("images/transparente.png");
         ABC.put(" ", letempty);
 
 
@@ -137,36 +131,74 @@ public class Traductor extends JPanel{
             //El Hash Map no recibe variables tipo char, p lo mismo se usa el String.valueOf
             //para transformarlos a un String
             String b= String.valueOf(texto.charAt(i)).toUpperCase();
-                String c;
+                String c=null;
                 //En caso de que se ingrese un espacio
             if (b.equals(" ")) {
-                c="images/nigga.png";
+                c="images/transparente.png";
+                //Imagen
+                //Carga la imagen
+                BufferedImage image = null;
+                //
+                try{
+                    //En el espacio donde dice c debe ir el pathname del File
+                    //P eso c debe ser un String
+                    image = ImageIO.read(new File(c));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                //Se crea el JLabel que pueda contener la imagen que cargamos
+                JLabel label = new JLabel(new ImageIcon(image));
+                panel.add(label);
                 //Cualquier otro caracter
                 //Se obtiene el valor almacenado para b (El caracter que se está analizando)
-            }   else{
+            }  else if(b.equals("J")){
+                JLabel gif = new JLabel();
+                gif.setIcon(new ImageIcon("images/J.gif"));
+                panel.add(gif);
+            } else if(b.equals("K")){
+                JLabel gif = new JLabel();
+                gif.setIcon(new ImageIcon("images/K.gif"));
+                panel.add(gif);
+            } else if(b.equals("Q")){
+                JLabel gif = new JLabel();
+                gif.setIcon(new ImageIcon("images/Q.gif"));
+                panel.add(gif);
+            } else if(b.equals("X")){
+                JLabel gif = new JLabel();
+                gif.setIcon(new ImageIcon("images/X.gif"));
+                panel.add(gif);
+            } else if(b.equals("Z")){
+                JLabel gif = new JLabel();
+                gif.setIcon(new ImageIcon("images/Z.gif"));
+                panel.add(gif);
+            }else{
                  c= String.valueOf(ABC.get(b));
+                //Imagen
+                //Carga la imagen
+                BufferedImage image = null;
+                //
+                try{
+                    //En el espacio donde dice c debe ir el pathname del File
+                    //P eso c debe ser un String
+                    image = ImageIO.read(new File(c));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                //Se crea el JLabel que pueda contener la imagen que cargamos
+                JLabel label = new JLabel(new ImageIcon(image));
+                panel.add(label);
             }
 
 
-            //Imagen
-            //Carga la imagen
-            BufferedImage image = null;
-            //
-            try{
-                //En el espacio donde dice c debe ir el pathname del File
-                //P eso c debe ser un String
-                image = ImageIO.read(new File(c));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
-
-            //Se crea el JLabel que pueda contener la imagen que cargamos
-             JLabel label = new JLabel(new ImageIcon(image));
 
             //Se añade el label al JPanel, que declaramos fuera del constructor
 
-                panel.add(label);
+
                 panel.setVisible(true);
                 panel.setBounds(220, 350, 1000, 900);
             panel.setOpaque(false);
