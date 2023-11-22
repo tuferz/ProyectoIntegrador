@@ -173,6 +173,10 @@ public class Traductor extends JPanel{
                 JLabel gif = new JLabel();
                 gif.setIcon(new ImageIcon("images/Z.gif"));
                 panel.add(gif);
+            } else if(b.equals("Ñ")){
+                JLabel gif = new JLabel();
+                gif.setIcon(new ImageIcon("images/Ñ.gif"));
+                panel.add(gif);
             }else{
                  c= String.valueOf(ABC.get(b));
                 //Imagen
